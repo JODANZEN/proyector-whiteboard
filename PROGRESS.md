@@ -80,3 +80,20 @@ Después, la prueba de la fase: poner el proyector en standby, esperar ~30 min, 
 **Resultado:** red y cast ✅ confirmados. Emparejamiento y wake-desde-standby: pendientes de Jose.
 **Bloqueado / decisiones para Jose:** ninguna nueva. Sigue pendiente la hora real de despertar (Fase 2) y el offset HDMI (el proyector todavía no se ha conectado por HDMI, así que `offset_x = 1920` sigue sin verificar).
 **Siguiente:** emparejar y probar el wake desde standby. Si prende, Fase 0 cerrada.
+
+## 2026-11-18 15:14 — Fase 0: emparejamiento ✅
+**Hecho:** Jose emparejó la PC con el proyector. Certificado en `secrets/cert.pem` + `key.pem` (confirmado que `.gitignore` los excluye, no están en el repo).
+
+**Verificado por Claude (proyector prendido):**
+- `power.wake status` ✅ → `estado: PRENDIDO`, dispositivo: **Formovie / Xming Google TV / sw 7.00.999235495**.
+- `power.wake wake` ✅ → conecta, lee el estado, manda `WAKEUP` y lo vuelve a leer sin error. Con el proyector ya prendido el WAKEUP es un no-op, así que esto valida el camino completo del código (conexión + envío de teclas), pero **no** prueba el despertar desde standby.
+
+**Probar (la prueba que cierra la Fase 0, solo Jose puede hacerla):**
+1. Apaga el proyector con su control (que entre en standby, no lo desconectes de la corriente).
+2. Espera ~30 min para que entre en standby profundo.
+3. `python -m power.wake wake`
+Si falla la conexión en el primer intento, córrelo una segunda vez antes de darlo por muerto: el reintento automático es de la Fase 2, todavía no está implementado.
+
+**Resultado:** emparejamiento ✅ confirmado. Wake desde standby: pendiente.
+**Bloqueado / decisiones para Jose:** falta conectar el proyector por HDMI para (a) anotar el offset real con `tools.displays` y (b) probar el cambio de entrada (`python -m power.wake hdmi 1`). No probé el cambio de entrada todavía a propósito: sin el HDMI conectado solo mostraría "sin señal" y habría que volver a cambiarlo a mano.
+**Siguiente:** la prueba de standby de arriba. Si prende → Fase 0 cerrada y arranca la Fase 1 (página de la mañana).
