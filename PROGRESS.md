@@ -58,3 +58,25 @@ Prueba de la fase (la del PLAN): poner el proyector en standby, esperar ~30 min 
 **Resultado:** ✅ público. Para revertir: `gh repo edit --visibility private --accept-visibility-change-consequences`.
 **Bloqueado / decisiones para Jose:** si quiere, limpiar los datos personales de los .md (requeriría reescribir el historial con `git filter-repo`, o simplemente editarlos de aquí en adelante).
 **Siguiente:** Fase 0, prueba de hardware de Jose (sigue pendiente).
+
+## 2026-11-18 15:02 — Fase 0: proyector encontrado en la red
+**Hecho:** Jose llenó config.toml. Correcciones y verificaciones:
+- `chromecast` tenía pegada la línea completa de `catt scan` (`"192.168.0.222 - Xming Google TV - Formovie Xming Google TV"`); el formato de catt es `IP - NOMBRE - MODELO`, así que lo dejé en `"Xming Google TV"`, que es lo único que entiende `catt -d`.
+- `power/cast.py`: ahora imprime el comando con `subprocess.list2cmdline` para que se vea entre comillas y sea copiable (antes el nombre con espacios salía sin comillas; funcionaba, pero confundía).
+
+**Verificado por Claude (con el proyector prendido):**
+- `power.scan` ✅ lo encuentra por mDNS: **Xming Google TV, 192.168.0.222**, puerto 6466, BT `E8:51:9E:82:05:0E`.
+- Puertos abiertos ✅: 6466 (API del remote), 6467 (emparejamiento), 8009 (Chromecast).
+- `power.cast status` ✅ responde con el nombre corregido (volumen 0, no muteado).
+- Cámara: Jose confirma que el **índice 0** es la buena (ya estaba como default en config.toml).
+
+**Probar:** el emparejamiento es interactivo (hay que escribir el PIN), así que lo corre Jose:
+```
+python -m power.wake pair      # sale un PIN de 6 dígitos en la pared, escríbelo
+python -m power.wake status    # -> "estado: PRENDIDO"
+```
+Después, la prueba de la fase: poner el proyector en standby, esperar ~30 min, y `python -m power.wake wake`.
+
+**Resultado:** red y cast ✅ confirmados. Emparejamiento y wake-desde-standby: pendientes de Jose.
+**Bloqueado / decisiones para Jose:** ninguna nueva. Sigue pendiente la hora real de despertar (Fase 2) y el offset HDMI (el proyector todavía no se ha conectado por HDMI, así que `offset_x = 1920` sigue sin verificar).
+**Siguiente:** emparejar y probar el wake desde standby. Si prende, Fase 0 cerrada.

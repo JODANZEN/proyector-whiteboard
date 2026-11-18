@@ -26,7 +26,7 @@ def _catt() -> list[str]:
 
 def _correr(argumentos: list[str]) -> int:
     cmd = _catt() + argumentos
-    print("$ " + " ".join(cmd), flush=True)
+    print("$ " + subprocess.list2cmdline(cmd), flush=True)
     try:
         return subprocess.call(cmd)
     except FileNotFoundError:

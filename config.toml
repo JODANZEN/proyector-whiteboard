@@ -2,9 +2,9 @@
 
 [proyector]
 # IP del proyector en la LAN. Averíguala con: python -m power.scan
-ip = ""
+ip = "192.168.0.222"
 # Nombre del Chromecast tal como sale en: python -m power.cast scan
-chromecast = ""
+chromecast = "Xming Google TV"
 # Nombre con el que esta PC se identifica al emparejarse (sale en la pared)
 nombre_cliente = "proyector-pc"
 
