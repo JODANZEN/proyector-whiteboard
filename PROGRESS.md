@@ -48,3 +48,13 @@ Prueba de la fase (la del PLAN): poner el proyector en standby, esperar ~30 min 
 **Resultado:** push ✅ (verificado: `git status -sb` dice `main...origin/main`). Lo demás, pendiente de Jose.
 **Bloqueado / decisiones para Jose:** las mismas de la entrada anterior (proyector no aparece en la red; elegir índice de cámara; hora real de despertar) + confirmar que la tarjeta tiene un puerto libre para el proyector.
 **Siguiente:** Fase 0, prueba de hardware de Jose.
+
+## 2026-11-18 14:34 — Repo público
+**Hecho:** el repo pasó a **público**: https://github.com/JODANZEN/proyector-whiteboard. Antes de cambiarlo revisé el historial completo: no hay `.env`, ni `secrets/`, ni certificados, ni `.npy`, ni API keys en ningún commit (solo `.env.example` vacío). También cambié las rutas del README a `$env:USERPROFILE` para que no lleven el nombre de usuario de Windows y para que el repo sirva en cualquier máquina.
+
+**Datos personales que SÍ quedan públicos a propósito** (están en CLAUDE.md / PLAN.md / las entradas viejas de PROGRESS.md, y las entradas viejas no se reescriben por regla del proyecto): el nombre "Jose", la ciudad (Tempe, AZ) con lat/lon en config.toml, el modelo del teléfono, la hora de despertar, la ruta `C:\Users\jdsn2\...` y la existencia del proyecto `pakito-jarvis`. Nada de eso es un secreto, pero ahí está si Jose prefiere limpiarlo.
+
+**Probar:** `gh repo view --json visibility` → `PUBLIC` (ya verificado).
+**Resultado:** ✅ público. Para revertir: `gh repo edit --visibility private --accept-visibility-change-consequences`.
+**Bloqueado / decisiones para Jose:** si quiere, limpiar los datos personales de los .md (requeriría reescribir el historial con `git filter-repo`, o simplemente editarlos de aquí en adelante).
+**Siguiente:** Fase 0, prueba de hardware de Jose (sigue pendiente).

@@ -9,13 +9,13 @@ en [PROGRESS.md](PROGRESS.md); las reglas de trabajo, en [CLAUDE.md](CLAUDE.md).
 El entorno virtual vive **fuera** de OneDrive para que no lo sincronice:
 
 ```powershell
-C:\Users\jdsn2\.venvs\proyector\Scripts\python.exe -m pip install -r requirements.txt
+& "$env:USERPROFILE\.venvs\proyector\Scripts\python.exe" -m pip install -r requirements.txt
 ```
 
 Para no escribir la ruta completa cada vez:
 
 ```powershell
-C:\Users\jdsn2\.venvs\proyector\Scripts\Activate.ps1
+. "$env:USERPROFILE\.venvs\proyector\Scripts\Activate.ps1"
 ```
 
 (Si PowerShell bloquea el script, usa la ruta completa de `python.exe` en todos los comandos.)
