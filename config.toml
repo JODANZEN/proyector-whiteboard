@@ -1,0 +1,31 @@
+# Configuración del proyector. Los secretos NO van aquí, van en .env (gitignored).
+
+[proyector]
+# IP del proyector en la LAN. Averíguala con: python -m power.scan
+ip = ""
+# Nombre del Chromecast tal como sale en: python -m power.cast scan
+chromecast = ""
+# Nombre con el que esta PC se identifica al emparejarse (sale en la pared)
+nombre_cliente = "proyector-pc"
+
+[morning]
+hora = "06:00"
+puerto = 8000
+# Tempe, AZ
+lat = 33.4255
+lon = -111.9400
+zona = "America/Phoenix"
+
+[board]
+# Índice de la webcam. Averíguala con: python -m board.camera list
+camara = 0
+# Resolución del proyector
+ancho = 1920
+alto = 1080
+# Offset de la pantalla extendida en el escritorio de Windows.
+# Averígualo con: python -m tools.displays
+offset_x = 1920
+offset_y = 0
+# Marcadores ArUco: tamaño y margen en px del proyector
+marcador_tam = 220
+marcador_margen = 80

@@ -1,0 +1,7 @@
+# Fase 0 — hardware
+androidtvremote2>=0.1.1   # control del proyector (Android TV remote v2)
+catt>=0.12.0              # cast por Chromecast
+zeroconf>=0.130           # descubrimiento del proyector en la LAN
+# Fase 3 — pizarra
+opencv-contrib-python>=4.10
+numpy>=1.26
