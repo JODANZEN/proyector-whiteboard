@@ -36,3 +36,15 @@ Prueba de la fase (la del PLAN): poner el proyector en standby, esperar ~30 min 
 3. Pendiente del plan original: a qué hora te despiertas de verdad (para la Fase 2).
 
 **Siguiente:** Jose corre los comandos de arriba con el proyector prendido. Si aparece → emparejar y probar el `wake` desde standby. Si no aparece → documentar el respaldo (smart plug con "encender al conectar", o un ESP32 que imite el control por BLE) y parar, como dice el PLAN.
+
+## 2026-11-18 14:26 — Repo en GitHub + hallazgo de monitores
+**Hecho:** repo subido a https://github.com/JODANZEN/proyector-whiteboard (**privado**, rama `main`). Para hacerlo público: `gh repo edit --visibility public`.
+
+**Hallazgo (pregunta de Jose: ¿aguanta 3 monitores?):** la PC tiene una **Radeon RX 7800 XT** (RDNA 3: hasta 4 pantallas simultáneas) *más* una iGPU "AMD Radeon(TM) Graphics", así que 2 monitores + el proyector no es problema de GPU, solo de puertos físicos. También aparece un "Meta Virtual Monitor" (driver de pantalla virtual, de Quest Link) instalado.
+
+**Consecuencia para la Fase 3:** `offset_x` / `offset_y` en config.toml **no son estables**. Cuando el proyector se apaga o se desconecta, Windows reacomoda las coordenadas del escritorio, y con un monitor virtual de por medio el orden puede cambiar. Decisión a tomar en la Fase 3: que `board/calibrate.py` y `overlay.py` busquen el monitor del proyector en tiempo real por resolución (1920x1080) con `tools/displays.py` en vez de confiar en el offset guardado. Por eso `tools.displays` ya avisa cuando no puede distinguir cuál monitor es el proyector.
+
+**Probar:** nada nuevo. Sigue pendiente la prueba de hardware de la entrada anterior.
+**Resultado:** push ✅ (verificado: `git status -sb` dice `main...origin/main`). Lo demás, pendiente de Jose.
+**Bloqueado / decisiones para Jose:** las mismas de la entrada anterior (proyector no aparece en la red; elegir índice de cámara; hora real de despertar) + confirmar que la tarjeta tiene un puerto libre para el proyector.
+**Siguiente:** Fase 0, prueba de hardware de Jose.
