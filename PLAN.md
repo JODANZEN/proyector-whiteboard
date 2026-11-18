@@ -40,6 +40,12 @@ board/overlay.py   → dibuja marcas en la pared encima de lo escrito
 
 Cada fase termina con una **prueba manual que Jose corre él mismo**. No pases a la siguiente fase hasta que Jose confirme que la prueba funcionó.
 
+> **Orden cambiado el 2026-11-18 por decisión de Jose:** el modo mañana no es prioritario.
+> El orden de trabajo es **0 → 3 → 4 → 1 → 2 → 5**. Los números de las fases se quedan
+> como están para que las entradas viejas de PROGRESS.md sigan teniendo sentido.
+> La pizarra (3 y 4) no depende de las fases 1 y 2: necesita HDMI + webcam, no el
+> Chromecast ni el Task Scheduler.
+
 ### Fase 0 — Probar el hardware
 - `power/wake.py`: emparejar con `androidtvremote2` (sale un PIN en la pared la primera vez), leer `is_on`, mandar `WAKEUP` (y probar `POWER` si no responde).
 - `power/cast.py`: `catt scan` + `cast_site` de una URL.

@@ -19,6 +19,10 @@ zona = "America/Phoenix"
 [board]
 # Índice de la webcam. Averíguala con: python -m board.camera list
 camara = 0
+# Resolución a pedirle a la webcam (0 = dejar la que traiga por default).
+# Más resolución = calibración más precisa, si la cámara la soporta.
+cam_ancho = 0
+cam_alto = 0
 # Resolución del proyector
 ancho = 1920
 alto = 1080

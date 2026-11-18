@@ -40,6 +40,17 @@ Para no escribir la ruta completa cada vez:
 | `python -m board.camera list` | lista webcams |
 | `python -m board.camera preview` | preview de la webcam (ESC sale, `s` guarda) |
 
+## Comandos (Fase 3 — pizarra)
+
+Necesita el proyector conectado por **HDMI** como pantalla extendida.
+
+| Comando | Qué hace |
+|---|---|
+| `python -m board.calibrate --autotest` | valida la homografía sin hardware |
+| `python -m board.calibrate` | proyecta los marcadores, calibra y guarda `cam2proj.npy` |
+| `python -m board.calibrate --guardar` | igual, y deja la foto de la cámara en `logs/` |
+| `python -m board.calibrate --test` | reusa la calibración guardada y solo hace la prueba del click |
+
 ## Estructura
 
 ```

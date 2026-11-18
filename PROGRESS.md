@@ -97,3 +97,34 @@ Si falla la conexión en el primer intento, córrelo una segunda vez antes de da
 **Resultado:** emparejamiento ✅ confirmado. Wake desde standby: pendiente.
 **Bloqueado / decisiones para Jose:** falta conectar el proyector por HDMI para (a) anotar el offset real con `tools.displays` y (b) probar el cambio de entrada (`python -m power.wake hdmi 1`). No probé el cambio de entrada todavía a propósito: sin el HDMI conectado solo mostraría "sin señal" y habría que volver a cambiarlo a mano.
 **Siguiente:** la prueba de standby de arriba. Si prende → Fase 0 cerrada y arranca la Fase 1 (página de la mañana).
+
+## 2026-11-18 15:41 — Cambio de prioridad + Fase 3: calibrate.py
+**Decisión de Jose:** el modo mañana no es prioritario. El orden de trabajo pasa a ser **0 → 3 → 4 → 1 → 2 → 5**. Anotado como nota en PLAN.md (los números de fase no se renumeraron, para que las entradas viejas sigan teniendo sentido). La pizarra no depende de las fases 1 y 2: necesita HDMI + webcam, no Chromecast ni Task Scheduler.
+
+**Hecho:** `board/calibrate.py`, el paso del prototipo a algo usable:
+- Todo sale de config.toml (resolución, offsets, cámara, tamaño y margen de los marcadores); ya no hay constantes en el código.
+- **Busca el monitor del proyector en tiempo real** por resolución con `tools/displays.py`, y solo usa `offset_x`/`offset_y` de config.toml como respaldo (esto era la decisión pendiente de la entrada de las 14:26: el offset guardado no es confiable porque Windows reacomoda las coordenadas).
+- Promedia las esquinas de los marcadores en varios frames (`--frames`, default 15) en vez de usar un solo frame como el prototipo.
+- `findHomography` con RANSAC e **informe del error de reproyección** en px, con aviso si pasa de 15 px.
+- Mensajes de error que dicen qué hacer (luz, encuadre, `--guardar` para ver lo que ve la cámara).
+- `--test` reusa `cam2proj.npy` sin recalibrar; `--guardar` deja la foto con los marcadores detectados en `logs/calib_camara.png`.
+- `--autotest` valida la matemática **sin proyector ni cámara**: deforma el lienzo con una homografía conocida, detecta los marcadores en esa imagen sintética, recupera la homografía y la compara con la real.
+- Nuevas llaves en config.toml: `cam_ancho` / `cam_alto` (0 = dejar el default de la cámara).
+
+**Verificado por Claude (sin hardware):** `python -m board.calibrate --autotest` → 4/4 marcadores detectados, error de reproyección medio 0.97 px / máximo 2.13 px, y contra la homografía real medio 0.90 px / máximo 1.40 px. O sea: la geometría y el orden de las esquinas están bien. Lo que esto NO prueba es nada óptico (brillo del proyector, enfoque, reflejos en la pared, encuadre de la webcam).
+
+**Probar (Jose):**
+```
+1. Conecta el proyector por HDMI y ponlo en pantalla extendida (Win+P -> Extender).
+2. python -m tools.displays        # confirma que sale un monitor de 1920x1080
+3. python -m board.calibrate --guardar
+```
+Deberías ver 4 cuadros negros en las esquinas de la pared, y en la consola `marcadores detectados: [0, 1, 2, 3] de [0, 1, 2, 3]`. Luego aparece la ventana "camara": haz click sobre un punto de la pared y debe salir un círculo rojo proyectado justo ahí. ESC para salir, c para limpiar.
+
+**Resultado:** autotest ✅. Calibración con hardware real: pendiente de Jose.
+**Bloqueado / decisiones para Jose:**
+1. Falta conectar el HDMI; sin eso la calibración no se puede probar.
+2. Para `analyze.py` (el siguiente paso de la Fase 3) hace falta la `GEMINI_API_KEY` en `.env`. Jose tiene que sacarla de aistudio.google.com (gratis) y pegarla ahí.
+3. Sigue pendiente la prueba de standby de la Fase 0 (Jose dijo que la haría). No bloquea la pizarra, solo el modo mañana.
+
+**Siguiente:** que Jose corra la calibración con el HDMI conectado. Después, `board/capture.py` (foto con el proyector en negro) + `board/analyze.py` (Gemini) para cerrar la Fase 3.
